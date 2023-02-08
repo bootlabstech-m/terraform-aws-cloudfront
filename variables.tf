@@ -23,10 +23,6 @@ variable "cached_methods" {
   description = "value"
   type        = list (string)
 }
-variable "cached_methods" {
-  description = "value"
-  type        = string
-}
 variable "query_string" {
   description = "value"
   type        = bool
