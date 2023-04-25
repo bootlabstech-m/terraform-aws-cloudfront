@@ -14,6 +14,14 @@ variable "s3_distribution_enabled" {
   description = "value"
   type        = bool
 }
+variable "versioning_enabled" {
+  description = "value"
+  type        = bool
+}
+variable "block_public_acls" {
+  description = "value"
+  type        = bool
+}
 
 variable "cache_allowed_methods" {
   description = "value"
