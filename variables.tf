@@ -16,11 +16,13 @@ variable "s3_distribution_enabled" {
 }
 variable "versioning_enabled" {
   description = "value"
-  type        = bool
+  type        = string
+  default = "Disabled"
 }
 variable "block_public_acls" {
   description = "value"
   type        = bool
+  default = false
 }
 
 variable "cache_allowed_methods" {
