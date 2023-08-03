@@ -1,5 +1,8 @@
 resource "aws_s3_bucket" "bucket" {
   bucket = var.bucket_name
+    lifecycle {
+    ignore_changes = [tags]
+  }
 
 }
 resource "aws_s3_bucket_versioning" "versioning_example" {
@@ -16,10 +19,7 @@ resource "aws_s3_bucket_public_access_block" "example" {
   ignore_public_acls      = var.block_public_acls
   restrict_public_buckets = var.block_public_acls
 }
-# resource "aws_s3_bucket_acl" "bucket_acl" {
-#   bucket = aws_s3_bucket.bucket.id
-#   acl    = "private"
-# }
+
 data "aws_iam_policy_document" "s3_policy" {
   statement {
     actions   = ["s3:GetObject"]
@@ -41,7 +41,6 @@ locals {
 }
 resource "aws_cloudfront_origin_access_identity" "origin_access" {
   comment = var.cloudfront_oai_comment
-
 }
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
@@ -82,4 +81,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   retain_on_delete = var.retain_on_delete
+    lifecycle {
+    ignore_changes = [tags]
+  }
 }
