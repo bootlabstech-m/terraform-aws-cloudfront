@@ -82,6 +82,16 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   retain_on_delete = var.retain_on_delete
     lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags,
+      aliases,
+      price_class,
+      restrictions[0].geo_restriction.locations,
+      viewer_certificate.acm_certificate_arn,
+      viewer_certificate.cloudfront_default_certificate,
+      viewer_certificate.minimum_protocol_version,
+      viewer_certificate.ssl_support_method,
+      origin,
+     ]
   }
 }
