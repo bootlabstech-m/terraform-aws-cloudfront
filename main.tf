@@ -37,9 +37,8 @@ resource "aws_s3_bucket_policy" "example" {
   policy = data.aws_iam_policy_document.s3_policy.json
 
   lifecycle {
-    ignore_changes = [
-      tags,          
-      policy 
+    ignore_changes = [        
+      policy
     ]
   }
 }
@@ -93,12 +92,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       tags,
       aliases,
       price_class,
-      restrictions[0].geo_restriction.locations,
-      viewer_certificate.acm_certificate_arn,
-      viewer_certificate.cloudfront_default_certificate,
-      viewer_certificate.minimum_protocol_version,
-      viewer_certificate.ssl_support_method,
-      origin,
+      restrictions[0].geo_restriction[0].locations,
+      viewer_certificate[0].acm_certificate_arn,
+      viewer_certificate[0].cloudfront_default_certificate,
+      viewer_certificate[0].minimum_protocol_version,
+      viewer_certificate[0].ssl_support_method,
+      origin
      ]
   }
 }
