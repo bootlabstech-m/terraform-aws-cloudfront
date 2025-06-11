@@ -35,6 +35,13 @@ data "aws_iam_policy_document" "s3_policy" {
 resource "aws_s3_bucket_policy" "example" {
   bucket = aws_s3_bucket.bucket.id
   policy = data.aws_iam_policy_document.s3_policy.json
+
+  lifecycle {
+    ignore_changes = [
+      tags,          
+      policy 
+    ]
+  }
 }
 locals {
   s3_origin_id = "myS3Origin"
