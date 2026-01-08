@@ -1,11 +1,5 @@
 terraform {
-  required_version = ">= 0.13" #Previous CLI version ">= 0.13"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.46.0" #Please refer official terraform provider documentation before updating provider version 
-    }
-  }
+  required_version = ">= 0.13"
   backend "s3" {}
 }
 
