@@ -1,80 +1,68 @@
 variable "bucket_name" {
-  description = "The name of the S3 bucket to be created"
+  description = "Name of the existing S3 bucket to be used as CloudFront origin"
   type        = string
 }
 
 variable "cloudfront_oai_comment" {
-  description = "A comment to identify the CloudFront Origin Access Identity (OAI)"
+  description = "Comment for the CloudFront Origin Access Identity"
   type        = string
   default     = "Test CloudFront OAI"
 }
 
 variable "s3_distribution_enabled" {
-  description = "Flag to enable or disable the CloudFront distribution for the S3 bucket"
-  type        = bool
-  default     = true
-}
-
-variable "versioning_enabled" {
-  description = "S3 bucket versioning configuration: Enabled or Disabled"
-  type        = string
-  default     = "Enabled"
-}
-
-variable "block_public_acls" {
-  description = "Whether to block public access control lists (ACLs) for the S3 bucket"
+  description = "Enable or disable the CloudFront distribution"
   type        = bool
   default     = true
 }
 
 variable "cache_allowed_methods" {
-  description = "List of HTTP methods that CloudFront caches responses for"
+  description = "HTTP methods allowed by CloudFront"
   type        = list(string)
   default     = ["GET", "HEAD", "OPTIONS"]
 }
 
 variable "cached_methods" {
-  description = "Subset of allowed methods that are cached by CloudFront"
+  description = "HTTP methods cached by CloudFront"
   type        = list(string)
   default     = ["GET", "HEAD"]
 }
 
 variable "query_string" {
-  description = "Specifies whether CloudFront forwards query strings to the origin"
+  description = "Whether CloudFront forwards query strings to S3"
   type        = bool
   default     = false
 }
 
 variable "cookies_forward" {
-  description = "Specifies how CloudFront handles cookies: none, whitelist, all"
+  description = "How CloudFront forwards cookies (none | whitelist | all)"
   type        = string
   default     = "none"
 }
 
 variable "viewer_protocol_policy" {
-  description = "Policy that determines whether viewers can use HTTP and/or HTTPS to access content"
+  description = "Viewer protocol policy (allow-all | redirect-to-https | https-only)"
   type        = string
 }
 
 variable "restriction_type" {
-  description = "Geo restriction type for CloudFront: none, whitelist, or blacklist"
+  description = "Geo restriction type (none | whitelist | blacklist)"
   type        = string
 }
 
 variable "geo_locations" {
-  description = "List of country codes for geographic restriction in CloudFront"
+  description = "Country codes for CloudFront geo restriction"
   type        = list(string)
   default     = ["US", "CA", "IN"]
 }
 
 variable "cloudfront_default_certificate" {
-  description = "Whether to use the default CloudFront certificate (for HTTPS)"
+  description = "Use CloudFront default SSL certificate"
   type        = bool
   default     = true
 }
 
 variable "retain_on_delete" {
-  description = "Whether to retain the CloudFront distribution on Terraform destroy"
+  description = "Retain CloudFront distribution on destroy"
   type        = bool
   default     = false
 }

@@ -1,47 +1,30 @@
-resource "aws_s3_bucket" "bucket" {
+data "aws_s3_bucket" "existing_bucket" {
   bucket = var.bucket_name
-    lifecycle {
-    ignore_changes = [tags]
-  }
-
-}
-resource "aws_s3_bucket_versioning" "versioning_example" {
-  bucket = aws_s3_bucket.bucket.id
-  versioning_configuration {
-    status = var.versioning_enabled
-  }
-}
-resource "aws_s3_bucket_public_access_block" "example" {
-  bucket = aws_s3_bucket.bucket.id
-
-  block_public_acls       = var.block_public_acls
-  block_public_policy     = var.block_public_acls
-  ignore_public_acls      = var.block_public_acls
-  restrict_public_buckets = var.block_public_acls
 }
 
 data "aws_iam_policy_document" "s3_policy" {
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${data.aws_s3_bucket.existing_bucket.arn}/*"]
 
     principals {
-      type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.origin_access.iam_arn]
+      type = "AWS"
+      identifiers = [
+        aws_cloudfront_origin_access_identity.origin_access.iam_arn
+      ]
     }
   }
 }
 
 resource "aws_s3_bucket_policy" "example" {
-  bucket = aws_s3_bucket.bucket.id
+  bucket = data.aws_s3_bucket.existing_bucket.id
   policy = data.aws_iam_policy_document.s3_policy.json
 
   lifecycle {
-    ignore_changes = [        
-      policy
-    ]
+    ignore_changes = [policy]
   }
 }
+
 locals {
   s3_origin_id = "myS3Origin"
 }
@@ -50,7 +33,7 @@ resource "aws_cloudfront_origin_access_identity" "origin_access" {
 }
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
-    domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
+    domain_name = data.aws_s3_bucket.existing_bucket.bucket_regional_domain_name
     origin_id   = local.s3_origin_id
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin_access.cloudfront_access_identity_path
@@ -87,7 +70,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   retain_on_delete = var.retain_on_delete
-    lifecycle {
+  lifecycle {
     ignore_changes = [
       tags,
       aliases,
@@ -98,6 +81,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       viewer_certificate[0].minimum_protocol_version,
       viewer_certificate[0].ssl_support_method,
       origin
-     ]
+    ]
   }
 }
